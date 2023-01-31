@@ -21,16 +21,8 @@ class ZendeskMessagingPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     var isInitialized: Boolean = false
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: MethodChannel.Result) {
-        val sendData: Any? = call.arguments
+        var sendData: Any? = call.arguments
         val zendeskMessaging = ZendeskMessaging(this, channel)
-
-        if(call.method=="getUnreadMessageCount"){
-                if (!isInitialized) {
-                    println("$tag - Messaging needs to be initialized first")
-                    return
-                }
-                result.success(zendeskMessaging.getUnreadMessageCount())
-        }
 
         when (call.method) {
             "initialize" -> {
@@ -49,7 +41,7 @@ class ZendeskMessagingPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 zendeskMessaging.show()
             }
             "isInitialized" -> {
-                result.success(isInitialized)
+               sendData = isInitialized
             }
             "loginUser" -> {
                 if (!isInitialized) {
@@ -75,6 +67,13 @@ class ZendeskMessagingPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                     return
                 }
                 zendeskMessaging.logoutUser()
+            }
+            "getUnreadMessageCount" -> {
+                if (!isInitialized) {
+                    println("$tag - Messaging needs to be initialized first")
+                    return
+                }
+                sendData = zendeskMessaging.getUnreadMessageCount()
             }
 
             else -> {
