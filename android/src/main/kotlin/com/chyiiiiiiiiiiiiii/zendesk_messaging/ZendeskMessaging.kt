@@ -62,6 +62,12 @@ class ZendeskMessaging(private val plugin: ZendeskMessagingPlugin, private val c
     fun clearConversationFields(){
         Zendesk.instance.messaging.clearConversationFields()
     }
+    fun setConversationTags(tags: List<String>){
+        Zendesk.instance.messaging.setConversationTags(tags)
+    }
+    fun clearConversationTags(){
+        Zendesk.instance.messaging.clearConversationTags()
+    }
     fun loginUser(jwt: String) {
         Zendesk.instance.loginUser(
             jwt,

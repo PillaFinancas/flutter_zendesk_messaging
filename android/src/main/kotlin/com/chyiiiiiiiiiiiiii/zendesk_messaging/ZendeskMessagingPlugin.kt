@@ -91,12 +91,39 @@ class ZendeskMessagingPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                     return
                 }
             }
+            "setConversationTags" -> {
+                if (!isInitialized) {
+                    println("$tag - Messaging needs to be initialized first")
+                    return
+                }
+
+                try {
+                    val tags = call.argument<List<String>>("tags")
+                    val fieldValue = call.argument<String>("fieldValue")
+                    if (tags == null || tags.isEmpty()) {
+                        throw Exception("tags is empty or null")
+                    }
+
+                    zendeskMessaging.setConversationTags(tags)
+                } catch (err: Throwable) {
+                    println("$tag - Messaging::setConversationTags invalid arguments. {'tags': '<your_tags>'} expected !")
+                    println(err.message)
+                    return
+                }
+            }
             "clearConversationFields" -> {
                 if (!isInitialized) {
                     println("$tag - Messaging needs to be initialized first")
                     return
                 }
                 zendeskMessaging.clearConversationFields()
+            }
+            "clearConversationTags" -> {
+                if (!isInitialized) {
+                    println("$tag - Messaging needs to be initialized first")
+                    return
+                }
+                zendeskMessaging.clearConversationTags()
             }
             "getUnreadMessageCount" -> {
                 if (!isInitialized) {

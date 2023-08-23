@@ -101,6 +101,25 @@ class ZendeskMessaging {
       debugPrint('ZendeskMessaging - clearConversationFields - Error: $e}');
     }
   }
+  /// Add tags to chat session
+  static Future<void> setConversationTags(
+      List<String> tags) async {
+    try {
+      await _channel.invokeMethod('setConversationTags',
+          {'tags': tags});
+    } catch (e) {
+      debugPrint('ZendeskMessaging - setConversationTags - Error: $e}');
+    }
+  }
+
+  
+  static Future<void> clearConversationTags() async {
+    try {
+      await _channel.invokeMethod('clearConversationTags');
+    } catch (e) {
+      debugPrint('ZendeskMessaging - clearConversationTags - Error: $e}');
+    }
+  }
 
 
 
