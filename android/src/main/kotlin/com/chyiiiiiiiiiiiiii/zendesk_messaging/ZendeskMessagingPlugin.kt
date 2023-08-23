@@ -68,6 +68,36 @@ class ZendeskMessagingPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 }
                 zendeskMessaging.logoutUser()
             }
+            "addConversationField" -> {
+                if (!isInitialized) {
+                    println("$tag - Messaging needs to be initialized first")
+                    return
+                }
+
+                try {
+                    val fieldId = call.argument<String>("fieldId")
+                    val fieldValue = call.argument<String>("fieldValue")
+                    if (fieldId == null || fieldId.isEmpty()) {
+                        throw Exception("fieldId is empty or null")
+                    }
+                    if (fieldValue==null||fieldValue.isEmpty()) {
+                        throw Exception("fieldValue is empty or null")
+                    }
+                    zendeskMessaging.addConversationField(fieldId, fieldValue)
+                } catch (err: Throwable) {
+                    println("$tag - Messaging::addConversationField invalid arguments. {'fieldId': '<your_fieldId>'} expected !")
+                    println("$tag - Messaging::addConversationField invalid arguments. {'fieldValue': '<your_fieldValue>'} expected !")
+                    println(err.message)
+                    return
+                }
+            }
+            "clearConversationFields" -> {
+                if (!isInitialized) {
+                    println("$tag - Messaging needs to be initialized first")
+                    return
+                }
+                zendeskMessaging.clearConversationFields()
+            }
             "getUnreadMessageCount" -> {
                 if (!isInitialized) {
                     println("$tag - Messaging needs to be initialized first")

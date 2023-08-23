@@ -55,6 +55,13 @@ class ZendeskMessaging(private val plugin: ZendeskMessagingPlugin, private val c
         }
     }
 
+    fun addConversationField(fieldId:String, fieldValue:String){
+        val fields = mapOf(fieldId to fieldValue)
+        Zendesk.instance.messaging.setConversationFields(fields)
+    }
+    fun clearConversationFields(){
+        Zendesk.instance.messaging.clearConversationFields()
+    }
     fun loginUser(jwt: String) {
         Zendesk.instance.loginUser(
             jwt,
@@ -87,6 +94,7 @@ class ZendeskMessaging(private val plugin: ZendeskMessagingPlugin, private val c
             }
         }
     }
+
 }
 
 
