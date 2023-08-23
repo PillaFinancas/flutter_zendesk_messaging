@@ -94,8 +94,7 @@ class ZendeskMessaging {
   }
 
   
-  static Future<void> clearConversationFields(
-      String fieldId, String fieldValue) async {
+  static Future<void> clearConversationFields() async {
     try {
       await _channel.invokeMethod('clearConversationFields');
     } catch (e) {
