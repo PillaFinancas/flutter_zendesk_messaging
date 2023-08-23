@@ -51,6 +51,33 @@ public class SwiftZendeskMessagingPlugin: NSObject, FlutterPlugin {
                 }
                 zendeskMessaging.logoutUser()
                 break
+            case "setConversationFields":
+                if (!isInitialized) {
+                    print("\(TAG) - Messaging needs to be initialized first.\n")
+                }
+                let fieldId: String = arguments?["fieldId"] as! String
+                let fieldValue: String = arguments?["fieldValue"] as! String
+                zendeskMessaging.setConversationFields(fields:[fieldId: fieldValue])
+                break
+            case "clearConversationFields":
+                if (!isInitialized) {
+                    print("\(TAG) - Messaging needs to be initialized first.\n")
+                }
+                zendeskMessaging.clearConversationFields()
+                break
+            case "setConversationTags":
+                if (!isInitialized) {
+                    print("\(TAG) - Messaging needs to be initialized first.\n")
+                }
+                let tags: [String] = arguments?["tags"] as! [String]
+                zendeskMessaging.setConversationTags(tags:tags)
+                break
+            case "clearConversationTags":
+                if (!isInitialized) {
+                    print("\(TAG) - Messaging needs to be initialized first.\n")
+                }
+                zendeskMessaging.clearConversationTags()
+                break
             case "getUnreadMessageCount":
                 if (!isInitialized) {
                     print("\(TAG) - Messaging needs to be initialized first.\n")

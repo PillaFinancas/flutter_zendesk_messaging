@@ -41,6 +41,22 @@ public class ZendeskMessaging: NSObject {
         rootViewController.present(messagingViewController, animated: true, completion: nil)
         print("\(self.TAG) - show")
     }
+
+    func setConversationFields( fields: [String : AnyHashable]) {
+        Zendesk.instance.messaging.setConversationFields(fields)
+    }
+    
+    func clearConversationFields() {
+        Zendesk.instance.messaging.clearConversationFields()
+    }
+
+    func setConversationTags(tags: [String]) {
+        Zendesk.instance.messaging.setConversationTags(tags)
+    }
+
+    func clearConversationTags() {
+        Zendesk.instance.messaging.clearConversationTags()
+    }
     
     func loginUser(jwt: String) {
         Zendesk.instance?.loginUser(with: jwt) { result in
