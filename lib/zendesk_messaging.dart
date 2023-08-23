@@ -82,22 +82,51 @@ class ZendeskMessaging {
     }
   }
 
+  /// Add conversation metadata field
+  static Future<void> addConversationField(
+      String fieldId, String fieldValue) async {
+    try {
+      await _channel.invokeMethod('addConversationField',
+          {'fieldId': fieldId, 'fieldValue': fieldValue});
+    } catch (e) {
+      debugPrint('ZendeskMessaging - addConversationField - Error: $e}');
+    }
+  }
+
+  
+  static Future<void> clearConversationFields(
+      String fieldId, String fieldValue) async {
+    try {
+      await _channel.invokeMethod('clearConversationFields');
+    } catch (e) {
+      debugPrint('ZendeskMessaging - clearConversationFields - Error: $e}');
+    }
+  }
+
+
+
   /// Authenticate the current session with a JWT
   ///
   /// @param  jwt       Required by the SDK - You must generate it from your backend
   /// @param  onSuccess Optional - If you need to be notified about the login success
   /// @param  onFailure Optional - If you need to be notified about the login failure
   static Future<void> loginUserCallbacks(
-      {required String jwt, Function(String? id, String? externalId)? onSuccess, Function()? onFailure}) async {
+      {required String jwt,
+      Function(String? id, String? externalId)? onSuccess,
+      Function()? onFailure}) async {
     if (jwt.isEmpty) {
       debugPrint('ZendeskMessaging - loginUser - jwt can not be empty');
       return;
     }
 
     try {
-      _setObserver(ZendeskMessagingMessageType.loginSuccess,
-          onSuccess != null ? (Map? args) => onSuccess(args?["id"], args?["externalId"]) : null);
-      _setObserver(ZendeskMessagingMessageType.loginFailure, onFailure != null ? (Map? args) => onFailure() : null);
+      _setObserver(
+          ZendeskMessagingMessageType.loginSuccess,
+          onSuccess != null
+              ? (Map? args) => onSuccess(args?["id"], args?["externalId"])
+              : null);
+      _setObserver(ZendeskMessagingMessageType.loginFailure,
+          onFailure != null ? (Map? args) => onFailure() : null);
 
       await _channel.invokeMethod('loginUser', {'jwt': jwt});
     } catch (e) {
@@ -112,8 +141,10 @@ class ZendeskMessaging {
     var completer = Completer<ZendeskLoginResponse>();
     await loginUserCallbacks(
       jwt: jwt,
-      onSuccess: (id, externalId) => completer.complete(ZendeskLoginResponse(id, externalId)),
-      onFailure: () => completer.completeError(Exception("Zendesk::loginUser failed")),
+      onSuccess: (id, externalId) =>
+          completer.complete(ZendeskLoginResponse(id, externalId)),
+      onFailure: () =>
+          completer.completeError(Exception("Zendesk::loginUser failed")),
     );
     return completer.future;
   }
@@ -122,10 +153,13 @@ class ZendeskMessaging {
   ///
   /// @param  onSuccess Optional - If you need to be notified about the logout success
   /// @param  onFailure Optional - If you need to be notified about the logout failure
-  static Future<void> logoutUserCallbacks({Function()? onSuccess, Function()? onFailure}) async {
+  static Future<void> logoutUserCallbacks(
+      {Function()? onSuccess, Function()? onFailure}) async {
     try {
-      _setObserver(ZendeskMessagingMessageType.logoutSuccess, onSuccess != null ? (Map? args) => onSuccess() : null);
-      _setObserver(ZendeskMessagingMessageType.logoutFailure, onFailure != null ? (Map? args) => onFailure() : null);
+      _setObserver(ZendeskMessagingMessageType.logoutSuccess,
+          onSuccess != null ? (Map? args) => onSuccess() : null);
+      _setObserver(ZendeskMessagingMessageType.logoutFailure,
+          onFailure != null ? (Map? args) => onFailure() : null);
 
       await _channel.invokeMethod('logoutUser');
     } catch (e) {
@@ -138,7 +172,8 @@ class ZendeskMessaging {
     var completer = Completer<void>();
     await logoutUserCallbacks(
       onSuccess: () => completer.complete(),
-      onFailure: () => completer.completeError(Exception("Zendesk::logoutUser failed")),
+      onFailure: () =>
+          completer.completeError(Exception("Zendesk::logoutUser failed")),
     );
     return completer.future;
   }
@@ -155,7 +190,7 @@ class ZendeskMessaging {
     }
   }
 
-///  Check if the Zendesk SDK for Android and iOS is already initialized
+  ///  Check if the Zendesk SDK for Android and iOS is already initialized
   static Future<bool> isInitialized() async {
     try {
       return await _channel.invokeMethod(
@@ -173,7 +208,8 @@ class ZendeskMessaging {
       return;
     }
 
-    final ZendeskMessagingMessageType type = channelMethodToMessageType[call.method]!;
+    final ZendeskMessagingMessageType type =
+        channelMethodToMessageType[call.method]!;
     var globalHandler = _handler;
     if (globalHandler != null) {
       globalHandler(type, call.arguments);
@@ -190,7 +226,9 @@ class ZendeskMessaging {
   }
 
   /// Add an observer for a specific type
-  static _setObserver(ZendeskMessagingMessageType type, Function(Map? args)? func, {bool removeOnCall = true}) {
+  static _setObserver(
+      ZendeskMessagingMessageType type, Function(Map? args)? func,
+      {bool removeOnCall = true}) {
     if (func == null) {
       _observers.remove(type);
     } else {
