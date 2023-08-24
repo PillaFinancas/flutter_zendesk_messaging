@@ -43,19 +43,19 @@ public class ZendeskMessaging: NSObject {
     }
 
     func setConversationFields( fields: [String : AnyHashable]) {
-        Zendesk.instance.messaging.setConversationFields(fields)
+        Zendesk.instance?.messaging?.setConversationFields(fields)
     }
     
     func clearConversationFields() {
-        Zendesk.instance.messaging.clearConversationFields()
+        Zendesk.instance?.messaging?.clearConversationFields()
     }
 
     func setConversationTags(tags: [String]) {
-        Zendesk.instance.messaging.setConversationTags(tags)
+        Zendesk.instance?.messaging?.setConversationTags(tags)
     }
 
     func clearConversationTags() {
-        Zendesk.instance.messaging.clearConversationTags()
+        Zendesk.instance?.messaging?.clearConversationTags()
     }
     
     func loginUser(jwt: String) {
